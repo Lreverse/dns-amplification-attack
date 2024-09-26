@@ -1,0 +1,8 @@
+$ORIGIN .
+$TTL 86400
+@   IN  SOA ns.root  admin.root.  ( 2023030302 1800 900 604800 86400 )
+@   IN  NS  ns.root.
+ns.root.  IN  A   192.168.1.2
+
+com    IN  NS  ns.com.
+ns.com IN  A   192.168.1.3

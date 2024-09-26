@@ -1,0 +1,460 @@
+name: dns-attack
+
+mgmt:
+  network: demo
+  ipv4-subnet: 172.10.10.0/24
+  ipv6-subnet: 2001:172:10:10::/80
+  
+topology:
+  nodes:
+  
+    # 客户端节点
+    client_1:
+      kind: linux
+      image: dns/client:latest
+      group: client
+      dns:
+        servers:
+          - 192.168.0.4
+      exec:
+        - ip addr add 192.168.0.2/24 brd + dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.0.4 dev eth1
+        - ip route add 192.168.2.0/24 via 192.168.0.4 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.0.4\" > /etc/resolv.conf"
+
+    client_2:
+      kind: linux
+      image: dns/client:latest
+      group: client
+      dns:
+        servers:
+          - 192.168.0.4
+      exec:
+        - ip addr add 192.168.0.3/24 brd + dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.0.4 dev eth1
+        - ip route add 192.168.2.0/24 via 192.168.0.4 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.0.4\" > /etc/resolv.conf"
+  
+    client_3:
+      kind: linux
+      image: dns/client:latest
+      group: client
+      dns:
+        servers:
+          - 192.168.0.4
+      exec:
+        - ip addr add 192.168.0.4/24 brd + dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.0.4 dev eth1
+        - ip route add 192.168.2.0/24 via 192.168.0.4 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.0.4\" > /etc/resolv.conf"
+
+
+    # 攻击者节点
+    attacker_1:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.3/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_2:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.4/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_3:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.5/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_4:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.6/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_5:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.7/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_6:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.8/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_7:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.9/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_8:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.10/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_9:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.11/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_10:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.12/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_11:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.13/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_12:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.14/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_13:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.15/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_14:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.16/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_15:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.17/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_16:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.18/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_17:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.19/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_18:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.20/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_19:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.21/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+    attacker_20:
+      kind: linux
+      image: dns/attacker:latest
+      group: attacker
+      # binds: 
+      #   - /home/lyp/cyber/lab/docker_images/attacker/dns_attack.py:/usr/local/bin/dns_attack.py
+      dns:
+        servers:
+          - 192.168.2.1
+      exec:
+        - ip addr add 192.168.2.22/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.2.1 dev eth1
+        - ip route add 192.168.1.0/24 via 192.168.2.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.2.1\" > /etc/resolv.conf"
+
+
+    # 递归服务器
+    resolver_1:
+      kind: linux
+      image: dns/resolver:latest
+      group: resolver
+      exec:
+        - ip addr add 192.168.0.4/24 brd + dev eth1
+        - ip addr add 192.168.1.1/24 brd + dev eth2
+        - ip route add 192.168.2.0/24 via 192.168.1.4 dev eth2
+        - /bin/bash -c "echo \"nameserver 192.168.0.4\" > /etc/resolv.conf"
+      sysctls:
+        net.ipv4.ip_forward: 1    # Enable router function
+
+    resolver_2:
+      kind: linux
+      image: dns/resolver:latest
+      group: resolver
+      exec:
+        - ip addr add 192.168.1.4/24 brd + dev eth1
+        - ip addr add 192.168.2.1/24 brd + dev eth2
+        - ip route add 192.168.0.0/24 via 192.168.1.1 dev eth1
+        - /bin/bash -c "echo \"nameserver 192.168.1.4\" > /etc/resolv.conf"
+      sysctls:
+        net.ipv4.ip_forward: 1    # Enable router function
+
+
+    # 根服务器配置
+    rootServer:
+      kind: linux
+      image: dns/root-server:latest
+      exec:
+        - ip addr add 192.168.1.2/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.1.1 dev eth1
+        - ip route add 192.168.2.0/24 via 192.168.1.4 dev eth1
+
+
+    # 顶级域服务器
+    nameServer_com:
+      kind: linux
+      image: dns/name-server-tld
+      group: nameServer
+      exec:
+        - ip addr add 192.168.1.3/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.1.1 dev eth1
+        - ip route add 192.168.2.0/24 via 192.168.1.4 dev eth1
+
+
+    # 权威服务器
+    nameServer_example_com:  
+      kind: linux
+      image: dns/name-server-auth
+      group: nameServer
+      exec:
+        - ip addr add 192.168.1.5/24 brd + dev eth1
+        - ip route add 192.168.0.0/24 via 192.168.1.1 dev eth1
+        - ip route add 192.168.2.0/24 via 192.168.1.4 dev eth1
+
+
+    # 二层交换机
+    switch_1:
+      kind: bridge
+    
+    switch_2:
+      kind: bridge
+    
+    switch_3:
+      kind: bridge
+
+
+  links:
+    # 192.168.0.0/24
+    - endpoints: ["switch_1:eth1", "client_1:eth1"]
+    - endpoints: ["switch_1:eth2", "client_2:eth1"]
+    # - endpoints: ["switch_1:eth3", "nameServer_1:eth1"]
+    - endpoints: ["switch_1:eth4", "resolver_1:eth1"]
+
+    # 192.168.1.0/24
+    - endpoints: ["switch_2:eth5", "resolver_1:eth2"]
+    - endpoints: ["switch_2:eth6", "resolver_2:eth1"]
+    - endpoints: ["switch_2:eth7", "rootServer:eth1"]
+    - endpoints: ["switch_2:eth8", "nameServer_com:eth1"]
+    - endpoints: ["switch_2:eth9", "nameServer_example_com:eth1"]
+
+    # 192.168.2.0/24
+    - endpoints: ["switch_3:eth10", "resolver_2:eth2"]
+    # - endpoints: ["switch_3:eth11", "nameServer_3:eth1"]
+    - endpoints: ["switch_3:eth12", "attacker_1:eth1"]
+    - endpoints: ["switch_3:eth13", "attacker_2:eth1"]
+    - endpoints: ["switch_3:eth14", "attacker_3:eth1"]
+    - endpoints: ["switch_3:eth15", "attacker_4:eth1"]
+    - endpoints: ["switch_3:eth16", "attacker_5:eth1"]
+    - endpoints: ["switch_3:eth17", "attacker_6:eth1"]
+    - endpoints: ["switch_3:eth18", "attacker_7:eth1"]
+    - endpoints: ["switch_3:eth19", "attacker_8:eth1"]
+    - endpoints: ["switch_3:eth20", "attacker_9:eth1"]
+    - endpoints: ["switch_3:eth21", "attacker_10:eth1"]
+    - endpoints: ["switch_3:eth22", "attacker_11:eth1"]
+    - endpoints: ["switch_3:eth23", "attacker_12:eth1"]
+    - endpoints: ["switch_3:eth24", "attacker_13:eth1"]
+    - endpoints: ["switch_3:eth25", "attacker_14:eth1"]
+    - endpoints: ["switch_3:eth26", "attacker_15:eth1"]
+    - endpoints: ["switch_3:eth27", "attacker_16:eth1"]
+    - endpoints: ["switch_3:eth28", "attacker_17:eth1"]
+    - endpoints: ["switch_3:eth29", "attacker_18:eth1"]
+    - endpoints: ["switch_3:eth30", "attacker_19:eth1"]
+    - endpoints: ["switch_3:eth31", "attacker_20:eth1"]
+
